@@ -23,7 +23,7 @@ class Block(object):
         return self.end - self.start + 1
 
     def __iter__(self):
-        return (chr(i) for i in range(self.start, self.end + 1))
+        return map(chr, range(self.start, self.end + 1)).__iter__()
 
 
 class Blocks(object):
