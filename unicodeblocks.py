@@ -4,7 +4,7 @@ and some more convenience objects.
 """
 import collections
 import itertools
-__all__ = ['Block', 'UnicodeBlocks', 'blocks']
+__all__ = ['Block', 'Blocks', 'blocks']
 
 class Block(object):
     def __init__(self, name, start, end, *args, **kwargs):
