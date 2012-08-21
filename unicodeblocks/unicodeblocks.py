@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # Copyright (c) 2012, Simonas Kazlauskas
 
 # Permission to use, copy,  modify, and/or distribute this software for any
@@ -11,16 +12,16 @@
 # LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE
 # OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 # PERFORMANCE OF THIS SOFTWARE.
-"""
-Module, to identify which block character belongs to, what block name is
-and some more convenience objects.
-"""
+from __future__ import unicode_literals
 import collections
 import itertools
-__all__ = ['Block', 'Blocks', 'blocks']
 
-version_info = collections.namedtuple('version_info', 'major minor')(0, 1)
-version = "{0.major}.{0.minor}".format(version_info)
+try:
+    chr(256)
+except ValueError:
+    # Python 2
+    chr = unichr
+
 
 class Block(object):
     def __init__(self, name, start, end, *args, **kwargs):
@@ -71,8 +72,12 @@ class Blocks(object):
             self._names[self._normalize_name(block.name)] = block
 
     def _normalize_name(self, name):
-        return name.lower().translate({ord(' '): None, ord('-'): None,
+        try:
+            return name.lower().translate({ord(' '): None, ord('-'): None,
                                        ord('_'): None})
+        except TypeError:
+            # Python 2
+            return name.lower().translate(None, b' -_')
 
     def block_of(self, char):
         for block in self.blocks():
@@ -113,7 +118,7 @@ def _expanded_args(func):
         return func(*(args or []), **(kwargs or {}))
     return wrap
 
-# Oh, this code is the cutest one, I've ever writen.
+# Oh, this code is the cutest one, I've ever written.
 blocks = _expanded_args(Blocks)(
     map(_expanded_args(Block), [
         ("Basic Latin", 0x0000, 0x007F,),
