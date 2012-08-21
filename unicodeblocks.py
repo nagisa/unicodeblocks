@@ -3,6 +3,7 @@ Module, to identify which block character belongs to, what block name is
 and some more convenience objects.
 """
 import collections
+import itertools
 __all__ = ['Block', 'UnicodeBlocks', 'blocks']
 
 class Block(object):
@@ -25,6 +26,21 @@ class Block(object):
     def __iter__(self):
         return map(chr, range(self.start, self.end + 1)).__iter__()
 
+    def __add__(self, other):
+        if isinstance(other, Block):
+            return Blocks(self, other)
+        else:
+            raise NotImplementedError
+
+    def __lt__(self, other):
+        return self.start < other.start and self.end < other.end
+
+    def __eq__(self, other):
+        return self.start == other.start and self.end == other.end
+
+    def __gt__(self, other):
+        return self.start > other.start and self.end > other.end
+
 
 class Blocks(object):
     """An object to represent a several blocks as one.
@@ -35,7 +51,7 @@ class Blocks(object):
 
     def __init__(self, *args, **kwargs):
         self._names = collections.OrderedDict()
-        for block in args:
+        for block in sorted(args):
             self._names[self._normalize_name(block.name)] = block
 
     def _normalize_name(self, name):
@@ -62,6 +78,13 @@ class Blocks(object):
 
     def __len__(self):
         return self._names.__len__()
+
+    def __add__(self, other):
+        if isinstance(other, Block):
+            return Blocks(*itertools.chain(self.blocks(), [other]))
+        elif isinstance(other, Blocks):
+            return Blocks(*itertools.chain(self.blocks(), other.blocks()))
+        raise NotImplementedError
 
     def blocks(self):
         return self._names.values().__iter__()
@@ -362,5 +385,12 @@ if __name__ == "__main__":
         def test_iter(self):
             hiragana = [chr(i) for i in range(0x3040, 0x309F + 1)]
             self.assertSequenceEqual(list(self.block), hiragana)
+
+        def test_add(self):
+            hirakata = Blocks(blocks['katakana'], blocks['hiragana']).blocks()
+            hirakata2 = list((blocks['katakana'] + self.block).blocks())
+            hirakata3 = (Blocks(self.block) + blocks['katakana']).blocks()
+            self.assertSequenceEqual(list(hirakata), hirakata2)
+            self.assertSequenceEqual(list(hirakata3), hirakata2)
 
     unittest.main()
