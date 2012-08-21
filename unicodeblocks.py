@@ -71,11 +71,7 @@ class Blocks(object):
 
 def _expanded_args(func):
     def wrap(args=None, kwargs=None):
-        if args == None:
-            args = []
-        if kwargs == None:
-            kwargs = {}
-        return func(*args, **kwargs)
+        return func(*(args or []), **(kwargs or {}))
     return wrap
 
 # Oh, this code is the cutest one, I've ever writen.
