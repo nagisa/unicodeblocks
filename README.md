@@ -97,3 +97,9 @@ Blocks(Block('Basic Latin', 0x0, 0x7f),Block('Latin Extended-A', 0x100, 0x17f))
 ```
 You can also add a `Block` to a instance of `Blocks` in same way, so addition
 is chainable.
+
+## Notes
+
+This module doesn't check for validity of characters that doesn't exist in a
+middle of block. For example see `\u38D`. If you care about valid unicode
+characters, you should try to obtain their name with `unicodedata` module.
