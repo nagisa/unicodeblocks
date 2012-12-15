@@ -1,105 +1,71 @@
-# unicodeblocks
+# unicodeblocks – Character blocks defined in unicode
 
-An utility to work with unicodeblocks in Python
+This module supplements `unicodedata` standard library module with ability
+to lookup and work with unicode blocks.
 
-## Usage
+## API
 
-Module contains two classes: `Block` and `Blocks`. `Blocks` is just a
-collection of `Block`.
-Also there's prebuilt instance of `Blocks` that contains all 220 Unicode 6.1.0
-blocks.
+### unicodedata.version
 
-```python
->>> import unicodeblocks
->>> unicodeblocks.blocks
-Blocks(...220 * Block...)
-```
+Version of module.
 
-### Blocks
+### unicodedata.unidata_version
 
-You can do quite a lot strange things with `Blocks`.
+The version of Unicode database used in this module.
 
-For example, if you want to know which block character belongs to, you can do it:
+### unicodeblocks.Block(name, start, end)
 
-```python
->>> unicodeblocks.blocks.block_of('-')
-Block('Basic Latin', 0x0, 0x7f)
->>> unicodeblocks.blocks.block_of('か')
-Block('Hiragana', 0x3040, 0x309f)
->>> unicodeblocks.blocks.block_of('日')
-Block('CJK Unified Ideographs', 0x4e00, 0x9fff)
-```
+#### unicodeblocks.Block.name
 
-You can iterate trough them:
-```
->>> unicodeblocks.blocks.blocks()
-<generator object __iter__ at 0x2d5df50>
->>> len(list(itertools.chain(*unicodeblocks.blocks.blocks())))
-253440 # of characters in all unicode blocks.
-```
+Normalized name of block.
 
-And trough names of blocks as well:
-```python
->>> list(unicodeblocks.blocks.names())
-['Basic Latin', 'Latin-1 Supplement', 'Latin Extended-A', 'Latin Extended-B', 'I
-PA Extensions',…]
-```
+#### unicodeblocks.Block.start
 
-Getting one specific block is easy as well:
-```python
-unicodeblocks.blocks['cyrillic']
-Block('Cyrillic', 0x400, 0x4ff)
-```
-Keys are not case sensitive.
-As per specification spaces, dashes and underscores are ignored as well.
-```python
->>> unicodeblocks.blocks['cy ri-ll_ic']
-Block('Cyrillic', 0x400, 0x4ff)
-```
+The first codepoint mapped by block. Inclusive.
 
-### Block
+#### unicodeblocks.Block.end
 
-They are ordeable, so you can sort them.
+The last codepoint mapped by block. Inclusive.
 
-There's three atributes available:
-```python
->>> latin.name # Full name of block
-'Latin Extended-A'
->>> latin.start # Block start codepoint
-256
->>> latin.end # Block end codepoint
-383
-```
+#### unicodeblocks.Block.__contains__(self, chr)
 
-You can check if letter belongs to some block:
-```python
->>> 'ą' in latin
-True
-```
-Get length of block or all letters in it:
-```python
->>> len(latin)
-128
->>> list(latin)
-['Ā', 'ā', 'Ă', 'ă', 'Ą', 'ą', 'Ć', 'ć', 'Ĉ', 'ĉ', 'Ċ', 'ċ', 'Č', 'č', 'Ď', 'ď',
- 'Đ', 'đ', 'Ē', 'ē', 'Ĕ', 'ĕ', 'Ė', 'ė', 'Ę', 'ę', 'Ě', 'ě', 'Ĝ', 'ĝ', 'Ğ', 'ğ',
- 'Ġ', 'ġ', 'Ģ', 'ģ', 'Ĥ', 'ĥ', 'Ħ', 'ħ', 'Ĩ', 'ĩ', 'Ī', 'ī', 'Ĭ', 'ĭ', 'Į', 'į',
- 'İ', 'ı', 'Ĳ', 'ĳ', 'Ĵ', 'ĵ', 'Ķ', 'ķ', 'ĸ', 'Ĺ', 'ĺ', 'Ļ', 'ļ', 'Ľ', 'ľ', 'Ŀ',
- 'ŀ', 'Ł', 'ł', 'Ń', 'ń', 'Ņ', 'ņ', 'Ň', 'ň', 'ŉ', 'Ŋ', 'ŋ', 'Ō', 'ō', 'Ŏ', 'ŏ',
- 'Ő', 'ő', 'Œ', 'œ', 'Ŕ', 'ŕ', 'Ŗ', 'ŗ', 'Ř', 'ř', 'Ś', 'ś', 'Ŝ', 'ŝ', 'Ş', 'ş',
- 'Š', 'š', 'Ţ', 'ţ', 'Ť', 'ť', 'Ŧ', 'ŧ', 'Ũ', 'ũ', 'Ū', 'ū', 'Ŭ', 'ŭ', 'Ů', 'ů',
- 'Ű', 'ű', 'Ų', 'ų', 'Ŵ', 'ŵ', 'Ŷ', 'ŷ', 'Ÿ', 'Ź', 'ź', 'Ż', 'ż', 'Ž', 'ž', 'ſ']
-```
-You can merge two blocks to get instance of `Blocks` for easy manipulation.
-```python
->>> unicodeblocks.blocks['basic latin'] + unicodeblocks.blocks['latin extended a']
-Blocks(Block('Basic Latin', 0x0, 0x7f),Block('Latin Extended-A', 0x100, 0x17f))
-```
-You can also add a `Block` to a instance of `Blocks` in same way, so addition
-is chainable.
+Checks either character is in this block.
+
+#### unicodeblocks.Block.__len__(self):
+
+Count of codepoints mapped by Block.
+
+#### unicodeblocks.Block.__lt__(self, other):
+
+Checks if both other.start and other.end are lower than self.start and
+self.end.
+
+#### unicodeblocks.Block.__gt__(self, other):
+
+Checks if both other.start and other.end are greater than self.start and
+self.end.
+
+#### unicodeblocks.Block.__eq__(self, other):
+
+Checks if both other.start equals to self.start and other.end equals to
+self.end.
+
+### unicodeblocks.blockof(chr)
+
+Will return a `Block` which maps the codepoint of chr or `None` in case not
+block maps the codepoint.
+
+### unicodeblocks.blocks
+
+A dictionary-like collection of all blocks defined by Unicode.
+
+#### unicodeblocks.blocks.names()
+
+Returns a list of names of blocks in dictionary. Use this instead of .keys()
+if you want names presentable to user.
 
 ## Notes
 
-This module doesn't check for validity of characters that doesn't exist in a
-middle of block. For example see `\u38D`. If you care about valid unicode
-characters, you should try to obtain their name with `unicodedata` module.
+Module doesn't check for if characters are assigned within block.
+For example see `\u38D`. If you care about validity of characters, you should
+try to obtain their name with `unicodedata` module.

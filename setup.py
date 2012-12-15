@@ -9,7 +9,7 @@ setup(
     name='unicodeblocks',
     version=unicodeblocks.version,
     description='Python module for unicode blocks',
-    long_description=read("README.md"),
+    # long_description=read("README.md"),
     author='Simonas Kazlauskas',
     license="ISC",
     url='https://github.com/simukis/unicodeblocks',
@@ -27,4 +27,3 @@ setup(
     ],
     zip_safe=False,
 )
-
