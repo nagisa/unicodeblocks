@@ -5,11 +5,11 @@ to lookup and work with unicode blocks.
 
 ## API
 
-### unicodedata.version
+### unicodeblocks.version
 
 Version of module.
 
-### unicodedata.unidata_version
+### unicodeblocks.unidata_version
 
 The version of Unicode database used in this module.
 
