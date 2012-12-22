@@ -66,6 +66,6 @@ if you want names presentable to user.
 
 ## Notes
 
-Module doesn't check for if characters are assigned within block.
-For example see `\u38D`. If you care about validity of characters, you should
+Module doesn't check if codepoints within block are assigned.
+For example see `\u38D`. If you care about that, you should
 try to obtain their name with `unicodedata` module.
