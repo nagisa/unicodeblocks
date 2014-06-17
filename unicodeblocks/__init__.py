@@ -18,6 +18,6 @@ and some more convenience functions.
 from collections import namedtuple
 from unicodeblocks._unicodeblocks import Block, blocks, blockof
 
-version_info = namedtuple('version_info', 'major minor')(0, 2)
+version_info = namedtuple('version_info', 'major minor')(0, 3)
 version = "{0.major}.{0.minor}".format(version_info)
 unidata_version = '7.0.0'
