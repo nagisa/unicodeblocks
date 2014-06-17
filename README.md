@@ -1,7 +1,7 @@
-# unicodeblocks – Character blocks defined in unicode
+# unicodeblocks – Character blocks defined in Unicode
 
 This module supplements `unicodedata` standard library module with ability
-to lookup and work with unicode blocks.
+to lookup and work with Unicode blocks.
 
 ## API
 
@@ -63,6 +63,26 @@ A dictionary-like collection of all blocks defined by Unicode.
 
 Returns a list of names of blocks in dictionary. Use this instead of .keys()
 if you want names presentable to user.
+
+## Some use cases
+
+### Find block a character belongs to
+
+```
+>>> unicodeblocks.blockof('-')
+Block('Basic Latin', 0x0, 0x7f)
+>>> unicodeblocks.blockof('か')
+Block('Hiragana', 0x3040, 0x309f)
+>>> unicodeblocks.blockof('日')
+Block('CJK Unified Ideographs', 0x4e00, 0x9fff)
+```
+
+### Number of codepoints defined in Unicode
+
+```
+>>> len(list(itertools.chain(*unicodeblocks.blocks.values())))
+256336
+```
 
 ## Notes
 
