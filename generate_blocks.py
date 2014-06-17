@@ -8,7 +8,7 @@ import os.path
 
 uri = 'http://www.unicode.org/Public/UNIDATA/Blocks.txt'
 root = os.path.dirname(os.path.abspath(__file__))
-target_path = os.path.join(root, 'unicodeblocks', 'blocklist.py')
+target_path = os.path.join(root, 'unicodeblocks', '_blocklist.py')
 
 with open(target_path, 'w') as f, request.urlopen(uri) as req:
     f.write('blocks = [\n')
